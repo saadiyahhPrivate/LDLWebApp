@@ -14,7 +14,7 @@ var possibleDiagnosis = [
 var locationSchema = mongoose.Schema({    
 	location: {        
 		lat: {type: Number, required: true},        
-		lon: {type: Number, required: true}     
+		lng: {type: Number, required: true}     
 	},    
 	diagnosis: {
 		type: String, 
