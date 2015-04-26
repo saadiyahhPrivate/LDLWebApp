@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
@@ -9,6 +10,16 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+var connection_string = process.env.MONGOLAB_URI || 'localhost/mmdx';
+console.log("connection_string: "+connection_string); 
+
+mongoose.connect(connection_string);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Mongoose connection error:'));
+db.once('open', function callback () {
+});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
