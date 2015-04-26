@@ -1,5 +1,4 @@
 var utils = {};
-var validator = require('validator');
 
 // Send a 200 SUCCESS code with success:true in the request body to the response argument
 // provided. The caller of this function should return after calling.
