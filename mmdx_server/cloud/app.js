@@ -17,6 +17,7 @@ app.get('/hello', function(req, res) {
 });
 
 app.get('/send_result', resultsController.create);
+app.post('/send_result', resultsController.create);
 app.get('/all', resultsController.showAll);
 
 // // Example reading from the request query string of an HTTP get request.
