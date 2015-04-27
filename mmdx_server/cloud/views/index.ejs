@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MMDx: Rapid Diagnostics</title>
+  </head>
+  <body>
+    <h1>Hello, here are the results from the database</h1>
+    <ul>
+		<% for(var i=0; i<results.length; i++) {%>
+   		<li>
+   			<p><%= results[i].get('lat') %></p>
+   			<p><%= results[i].get('lng') %></p>
+   			<p><%= results[i].get('diagnosis') %></p>
+   		</li>
+		<% } %>
+		</ul>
+  </body>
+</html>

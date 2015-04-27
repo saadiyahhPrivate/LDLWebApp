@@ -1,0 +1,14 @@
+{
+  "global": {
+    "parseVersion": "1.4.2"
+  },
+  "applications": {
+    "_default": {
+      "link": "mmdxWebApp"
+    },
+    "mmdxWebApp": {
+      "applicationId": "z2v1UxBUDcOeOpP76S0kaJ0cMlPPfkB9qXUC2hsg",
+      "masterKey": "ADDYfbq4xSj4t2TOmLdxOlJwv21RkKS1XKdKZ0Mj"
+    }
+  }
+}
