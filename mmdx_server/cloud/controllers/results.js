@@ -32,4 +32,6 @@ exports.showAll = function(req, res) {
   function() {
     res.send(500, 'Failed loading results');
   });
+
+
 };

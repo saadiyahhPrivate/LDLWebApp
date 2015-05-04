@@ -2,31 +2,35 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <title>MMDx: Rapid Diagnostics</title>
+
   </head>
   <body>
-    <style>
-      .graticule {
-        fill: none;
-        stroke: #777;
-        stroke-opacity: .5;
-        stroke-width: .5px;
-      }
-
-      .land {
-        fill: #222;
-      }
-
-      .boundary {
-        fill: none;
+   <style>
+      .country {
+        fill: #ccc;
         stroke: #fff;
         stroke-width: .5px;
+        stroke-linejoin: round;
       }
-    </style>
 
+      .graticule {
+        fill: none;
+        stroke: #000;
+        stroke-opacity: .3;
+        stroke-width: .5px;
+      }
 
+      .graticule.outline {
+        stroke: #333;
+        stroke-opacity: 1;
+        stroke-width: 1.5px;
+      }
+
+      </style>
 
     <!-- New Stuff-->
     <div style= "display: inline-block">
@@ -36,48 +40,48 @@
       </div>
 
       <div id='mapDiv' style="float:right">
-      <script>
-      var runMyScript = function(){
-          var width = 800,
-              height = 800;
-
-          var projection = d3.geo.mercator()
-              .scale((width + 1) / 2 / Math.PI)
-              .translate([width / 2, height / 2])
-              .precision(.1);
-
-          var path = d3.geo.path()
-              .projection(projection);
-
-          var graticule = d3.geo.graticule();
-
-          var svg = d3.select("mapDiv").append("svg")
-              .attr("width", width)
-              .attr("height", height);
-
-          svg.append("path")
-              .datum(graticule)
-              .attr("class", "graticule")
-              .attr("d", path);
-
-          d3.json("/mbostock/raw/4090846/world-50m.json", function(error, world) {
-            svg.insert("path", ".graticule")
-                .datum(topojson.feature(world, world.objects.land))
-                .attr("class", "land")
-                .attr("d", path);
-
-            svg.insert("path", ".graticule")
-                .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
-                .attr("class", "boundary")
-                .attr("d", path);
-          });
-
-          d3.select(self.frameElement).style("height", height + "px");
-      }
-
-        </script>
 
       </div>
+
+      <script>
+        var runMyScript = function(){
+            var width = 960,
+            var height = 500;
+
+            var projection = d3.geo.kavrayskiy7(),
+                color = d3.scale.category20(),
+                graticule = d3.geo.graticule();
+
+            var path = d3.geo.path()
+                .projection(projection);
+
+            var svg = d3.select("mapDiv").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            svg.append("path")
+                .datum(graticule)
+                .attr("class", "graticule")
+                .attr("d", path);
+
+            svg.append("path")
+                .datum(graticule.outline)
+                .attr("class", "graticule outline")
+                .attr("d", path);
+
+            d3.json("readme-world.json", function(error, world) {
+              var countries = topojson.feature(world, world.objects.countries).features,
+                  neighbors = topojson.neighbors(world.objects.countries.geometries);
+
+              svg.selectAll(".country")
+                  .data(countries)
+                .enter().insert("path", ".graticule")
+                  .attr("class", "country")
+                  .attr("d", path)
+                  .style("fill", function(d, i) { return color(d.color = d3.max(neighbors[i], function(n) { return countries[n].color; }) + 1 | 0); });
+            });
+        }
+      </script>
 
 
 
