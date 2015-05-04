@@ -5,9 +5,21 @@
 
     <style>
       #map-canvas {
-        width: 800px;
-        height: 800px;
+        width: 1000px;
+        height: 600px;
       }
+
+      #contollerBar{
+        float:left; 
+        min-width:300px; 
+        height:580px; 
+        padding-top:20px;
+        padding-right:20px;
+        padding-left:20px;
+        background-color: #dcdcdc;
+
+      }
+
     </style>
 
     <script src="https://maps.googleapis.com/maps/api/js"></script>
@@ -16,8 +28,8 @@
       function initialize() {
         var mapCanvas = document.getElementById('map-canvas');
         var mapOptions = {
-          center: new google.maps.LatLng(44.5403, -78.5463),
-          zoom: 8,
+          center: new google.maps.LatLng(11.109315, 22.000575),
+          zoom: 2,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         }
         var map = new google.maps.Map(mapCanvas, mapOptions);
@@ -28,16 +40,16 @@
   </head>
 
   <body>
-    <div style:"display:inline-block;">
-      <div id="controllers" style="float:left; min-width:100px; height:800px">
+    <div id="Map components">
+      <div id="contollerBar">
         <!-- Put controls here -->
         <p> Tweak things here to display</p>
       </div>
-
-      <div id="map-canvas" style="float:right;"></div>
+      <div id="map-canvas"></div>
     </div>
 
-    <h1>Hello, here are the results from the database</h1>
+    <div id="queryThings">
+          <h1>Hello, here are the results from the database</h1>
     
     <ul>
     <% for(var i=0; i<results.length; i++) {%>
@@ -50,6 +62,7 @@
     <% } %>
     </ul>
 
+    </div>
 
   </body>
 </html>
