@@ -21,24 +21,24 @@ app.post('/send_data', resultsController.receiveData);
 app.get('/all', resultsController.showAll);
 
 //adding stuff for d3.js
-require.config({
-  paths: {
-    "d3": "http://d3js.org/d3.v3.min",
-    "d3.geo.projection": "http://d3js.org/d3.geo.projection.v0.min",
-    "topojson": "http://d3js.org/topojson.v1.min"
-  },
-  shim: {
-    "d3.geo.projection": ["d3.global"]
-  }
-});
+// require.config({
+//   paths: {
+//     "d3": "http://d3js.org/d3.v3.min",
+//     "d3.geo.projection": "http://d3js.org/d3.geo.projection.v0.min",
+//     "topojson": "http://d3js.org/topojson.v1.min"
+//   },
+//   shim: {
+//     "d3.geo.projection": ["d3.global"]
+//   }
+// });
 
-define("d3.global", ["d3"], function(_) {
-  d3 = _;
-});
+// define("d3.global", ["d3"], function(_) {
+//   d3 = _;
+// });
 
-require(["d3", "topojson", "d3.geo.projection"], function(d3, topojson) {
-  console.log(d3.geo.aitoff);
-});
+// require(["d3", "topojson", "d3.geo.projection"], function(d3, topojson) {
+//   console.log(d3.geo.aitoff);
+// });
 
 //adding stuff for d3.js
 
