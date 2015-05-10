@@ -75,6 +75,27 @@
           noWrap: true
         }
       }).setView([11.109315, 22.000575], 2);
+
+      map.featureLayer.setGeoJSON([]);
+      var markers = map.featureLayer.getGeoJSON();
+      // a simple GeoJSON featureset with a single point
+      // with no properties
+      var geojson = {
+          type: "Feature",
+          geometry: {
+              type: "Point",
+              coordinates: [10, 10]
+          },
+          properties: {
+              title: "test ebola",
+
+              "marker-size" : "small",
+              "marker-color" : "red",
+              "marker-symbol" : "ice-cream"
+          }
+      };
+      markers.push(geojson);
+      map.featureLayer.setGeoJSON(markers);
       </script>
     </div>
 
