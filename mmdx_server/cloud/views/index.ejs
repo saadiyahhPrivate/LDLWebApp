@@ -26,6 +26,8 @@
     </style>
 
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.7.0/mapbox-gl.js'></script>
@@ -56,25 +58,61 @@
       }).setView([11.109315, 22.000575], 2);
 
       map.featureLayer.setGeoJSON([]);
-      var markers = map.featureLayer.getGeoJSON();
-      // a simple GeoJSON featureset with a single point
-      // with no properties
-      var geojson = {
-          type: "Feature",
-          geometry: {
-              type: "Point",
-              coordinates: [10, 10]
-          },
-          properties: {
-              title: "test ebola",
+      
 
-             'marker-size': 'large',
-             'marker-symbol': 'bus',
-             'marker-color': '#fa0'
-          }
-      };
-      markers.push(geojson);
-      map.featureLayer.setGeoJSON(markers);
+      // var geojson = {
+      //     type: "Feature",
+      //     geometry: {
+      //         type: "Point",
+      //         coordinates: [10, 10]
+      //     },
+      //     properties: {
+      //         title: "test ebola",
+
+      //        'marker-size': 'large',
+      //        'marker-symbol': 'bus',
+      //        'marker-color': '#fa0'
+      //     }
+      // };
+      // markers.push(geojson);
+      // map.featureLayer.setGeoJSON(markers);
+      $.ajax({
+
+            url: "/map",
+            method: "GET",
+            success: function(data) {
+                if (data.statusCode == 200) {
+                  addMarkers(data.results);
+
+                } else {
+                    errorRedirect(data.message);
+                }
+            }   
+        });
+
+      var addMarkers = function(results){
+        var markers = map.featureLayer.getGeoJSON();
+        for (var i=0; i<results.length; i++){
+          var res = results[i];
+          var geojson = {
+                 type: "Feature",
+                 geometry: {
+                  type: "Point",
+                  coordinates: [res.lat, res.lng]
+                 },
+                 properties: {
+                   title: res.diagnosis,
+
+                  'marker-size': 'large',
+                  'marker-symbol': 'bus',
+                  'marker-color': '#fa0'
+                }
+          };
+          markers.push(geojson);
+
+        }
+        map.featureLayer.setGeoJSON(markers);
+      }
       </script>
     </div>
 

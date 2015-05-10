@@ -26,6 +26,19 @@ exports.receiveData = function(req, res) {
   });
 }
 
+exports.giveAll = function(req, res) {
+  var query = new Parse.Query(Result);
+  query.descending('createdAt');
+  query.find().then(function(results) {
+    res.json({statusCode: 200, results:results});
+    //res.render('index', {results: results });
+  },
+  function() {
+    res.json({statusCode: 500, message:"too bad"});
+    //res.send(500, 'Failed loading results');
+  });
+};
+
 exports.showAll = function(req, res) {
   var query = new Parse.Query(Result);
   query.descending('createdAt');

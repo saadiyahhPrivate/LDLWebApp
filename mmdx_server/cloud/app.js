@@ -9,6 +9,8 @@ app.set('views', 'cloud/views');  // Specify the folder to find templates
 app.set('view engine', 'ejs');    // Set the template engine
 app.use(express.bodyParser());    // Middleware for reading request body
 
+
+
 // This is an example of hooking up a request handler with a specific request
 // path and HTTP verb using the Express routing API.
 
@@ -19,6 +21,7 @@ app.get('/hello', function(req, res) {
 
 app.post('/send_data', resultsController.receiveData);
 app.get('/all', resultsController.showAll);
+app.get('/map', resultsController.giveAll);
 
 //adding stuff for d3.js
 // require.config({
