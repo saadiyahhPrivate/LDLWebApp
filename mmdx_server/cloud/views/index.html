@@ -5,23 +5,25 @@
     <title>MMDx: File to test functions rapidly</title>
 
     <style>
-      #map-canvas {
-        width: 1050px;
-        height: 600px;
+      #map2 {
+        min-width:900px;
+        max-width: 1050px;
+        min-height: 580px;
+        width:auto;
+        height:auto;
       }
 
       #contollerBar{
         float:left; 
         min-width:300px; 
         height:580px; 
-        padding-top:20px;
         padding-right:20px;
         padding-left:20px;
         background-color: #dcdcdc;
 
       }
 
-     #map2 { width:1050px; height:600px; }
+     #map-canvas { width:1050px; height:600px; }
 
     </style>
 
@@ -29,36 +31,13 @@
     <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
 
-    <script>
-      // function initialize() {
-      //   var mapCanvas = document.getElementById('map-canvas');
-      //   var mapOptions = {
-      //     center: new google.maps.LatLng(11.109315, 22.000575),
-      //     zoom: 2,
-      //     mapTypeId: google.maps.MapTypeId.ROADMAP
-      //   }
-      //   var map = new google.maps.Map(mapCanvas, mapOptions);
-      // };
-      // google.maps.event.addDomListener(window, 'load', initialize);
-
-    </script>
-
   </head>
 
   <body>
-<!--     Google API Approach 
-    <h1> GoogleAPI approach</h1>
-    <div id="Map components">
-      <div id="contollerBar">
-         Put controls here 
-        <p> Tweak things here to display</p>
-      </div>
-      <div id="map-canvas"></div>
-    </div> -->
 
     <!-- MapBox Approach -->
     <h1> Mapbox approach: In progress</h1>
-    <div id="Map components">
+    <div id="Map components" style="display:in-block">
       <div id="contollerBar">
         <!-- Put controls here -->
         <p> Tweak things here to display</p>
@@ -76,7 +55,7 @@
         }
       }).setView([11.109315, 22.000575], 2);
       </script>
-    </div>
+    </div> </br>
 
     <!-- Printout of query results -->
     <div id="queryThings">
