@@ -17,7 +17,7 @@ app.get('/hello', function(req, res) {
 });
 
 
-app.post('/send_data', resultsController.create);
+app.post('/send_data', resultsController.receiveData);
 app.get('/all', resultsController.showAll);
 
 //adding stuff for d3.js
