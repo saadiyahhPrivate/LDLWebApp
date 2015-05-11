@@ -92,22 +92,26 @@
 
       var addMarkers = function(results){
         var markers = map.featureLayer.getGeoJSON();
-        var diagnosisColors = {"Malaria": '#fa0', "Tuberculosis": "#8DD2D7", "Dengue": "#CF4E4E", "Ebola": "#53CF4E"};
+        var diagnosisColors = {'Malaria': '#fa0', 'Tuberculosis': "#8DD2D7", 'Dengue': "#CF4E4E", 'Ebola': "#53CF4E"};
+        //var diagnosisColors = {'Malaria': '#fa0', 'Tuberculosis': "#fa0", 'Dengue': "#fa0", 'Ebola': "#fa0"};
         for (var i=0; i<results.length; i++){
           var res = results[i];
           var diagnosis = res.diagnosis;
+          var myColor = diagnosisColors[diagnosis];
+          //console.log(myColor);
+          var description = "latitude: "+ res.lat + ", longitude: "+ res.lng;
           var geojson = {
                  type: "Feature",
                  geometry: {
                   type: "Point",
-                  coordinates: [res.lat, res.lng]
+                  coordinates: [res.lng, res.lat]
                  },
                  properties: {
                    title: diagnosis,
-
-                  'marker-size': 'large',
-                  'marker-symbol': 'bus',
-                  'marker-color': diagnosisColors.diagnosis
+                   description: description,
+                  'marker-size': 'small',
+                  'marker-symbol': 'chemist',
+                  'marker-color': myColor
                 }
           };
           markers.push(geojson);
