@@ -53,9 +53,14 @@ exports.showAll = function(req, res) {
 exports.giveFiltered = function(req, res) {
   var filterParams = req.body;
   var list = filterParams.diseases;
+  var minDate = new Date(filterParams.minDate);
+  var maxDate = new Date(filterParams.maxDate);
+
   var query = new Parse.Query(Result);
   query.descending('createdAt');
   query.containedIn("diagnosis", list)
+  query.greaterThanOrEqualTo( "createdAt", minDate);
+  query.lessThanOrEqualTo( "createdAt", maxDate);
   query.find({
     success: function(results) {
       res.json({statusCode: 200, results:results});;

@@ -39,7 +39,7 @@ $(document).ready(function(){
     var minDate=new Date(Math.min.apply(null,dates));
 
     $("#slider").dateRangeSlider({
-      arrows:false,
+      valueLabels: "change",
       bounds:{
         min: minDate,
         max:maxDate
@@ -66,7 +66,7 @@ $(document).ready(function(){
       var myColor = diagnosisColors[diagnosis];
       var mySymbol = symbol[diagnosis];
       //console.log(myColor);
-      var description = "latitude: "+ res.lat + ", longitude: "+ res.lng;
+      var description = "latitude: "+ res.lat + ", longitude: "+ res.lng+"; CreatedAt: "+res.createdAt;
       var geojson = {
              type: "Feature",
              geometry: {
@@ -112,6 +112,12 @@ $(document).ready(function(){
     }
 
     var query = {'diseases':disList};
+
+    var dateValues = $("#slider").dateRangeSlider("values");
+    var minDate = dateValues.min;
+    var maxDate = dateValues.max;
+    query.minDate = minDate;
+    query.maxDate = maxDate;
 
 
     $.ajax({
