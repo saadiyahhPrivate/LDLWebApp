@@ -49,44 +49,47 @@
 
     <!-- MapBox Approach -->
     <h1> Mapbox approach: In progress 2</h1>
-    <nav id='filters' class='filter-ui'></nav>
+    
     <div id="Map components">
       <div id="contollerBar">
         <!-- Put controls here -->
         <p> Tweak things here to display</p>
       </div>
+      <nav id='filters' class='filter-ui'></nav>
       <div id='map2'></div>
       <script>
-      L.mapbox.accessToken = 'pk.eyJ1IjoibW1keGFwcCIsImEiOiJwY0Q4MHZ3In0.pM9yzFoRKpkXcm8T8rh1QQ';
-      var map = L.mapbox.map('map2', 'mmdxapp.58a3a46d', {
-        // These options apply to the tile layer in the map.
-        tileLayer: {
-        // This map option disables world wrapping. by default, it is false.
-          continuousWorld: false,
-        // This option disables loading tiles outside of the world bounds.
-          noWrap: true
-        }
-      }).setView([11.109315, 22.000575], 2);
+        L.mapbox.accessToken = 'pk.eyJ1IjoibW1keGFwcCIsImEiOiJwY0Q4MHZ3In0.pM9yzFoRKpkXcm8T8rh1QQ';
+        var map = L.mapbox.map('map2', 'mmdxapp.58a3a46d', {
+          // These options apply to the tile layer in the map.
+          tileLayer: {
+          // This map option disables world wrapping. by default, it is false.
+            continuousWorld: false,
+          // This option disables loading tiles outside of the world bounds.
+            noWrap: true
+          }
+        }).setView([11.109315, 22.000575], 2);
 
-      map.featureLayer.setGeoJSON([]);
+        L.mapbox.featureLayer().setGeoJSON([]);
+
+        //map.featureLayer.setGeoJSON([]);
+
+        $.ajax({
+
+              url: "/map",
+              method: "GET",
+              success: function(data) {
+                  if (data.statusCode == 200) {
+                    addMarkers(data.results);
+
+                  } else {
+                      errorRedirect(data.message);
+                  }
+              }   
+          });
+
       
-      $.ajax({
 
-            url: "/map",
-            method: "GET",
-            success: function(data) {
-                if (data.statusCode == 200) {
-                  addMarkers(data.results, setCheckboxes);
-
-                } else {
-                    errorRedirect(data.message);
-                }
-            }   
-        });
-
-      
-
-      var addMarkers = function(results, callback){
+      var addMarkers = function(results){
         var markers = map.featureLayer.getGeoJSON();
         var diagnosisColors = {'Malaria': '#fa0', 'Tuberculosis': "#8DD2D7", 'Dengue': "#CF4E4E", 'Ebola': "#53CF4E"};
         var symbol = {'Malaria': 'm', 'Tuberculosis': "t", 'Dengue': "d", 'Ebola': "e"};
@@ -116,77 +119,9 @@
 
         }
         map.featureLayer.setGeoJSON(markers);
-        callback();
       }
-
-          // Find and store a variable reference to the list of filters.
       
-      var setCheckboxes = function(){
-        var filters = document.getElementById('filters');
-
-          // Wait until the marker layer is loaded in order to build a list of possible
-        // types. If you are doing this with another featureLayer, you should change
-        // map.featureLayer to the variable you have assigned to your featureLayer.
-        map.featureLayer.on('ready', function() {
-
-          console.log("even Before");
-          // Collect the types of symbols in this layer. you can also just
-          // hardcode an array of types if you know what you want to filter on,
-          // like var types = ['foo', 'bar'];
-          var typesObj = {};
-          var types = [];
-          console.log("Before");
-          console.log(map.featureLayer.getGeoJSON());
-          var features = map.featureLayer.getGeoJSON().features;
-          console.log("FILTERS");
-          console.log(features);
-
-
-          for (var i = 0; i < features.length; i++) {
-            typesObj[features[i].properties['marker-symbol']] = true;
-          }
-          for (var k in typesObj) types.push(k);
-          console.log(types);
-
-          var checkboxes = [];
-          // Create a filter interface.
-          for (var i = 0; i < types.length; i++) {
-            // Create an an input checkbox and label inside.
-            var item = filters.appendChild(document.createElement('div'));
-            var checkbox = item.appendChild(document.createElement('input'));
-            var label = item.appendChild(document.createElement('label'));
-            checkbox.type = 'checkbox';
-            checkbox.id = types[i];
-            checkbox.checked = true;
-            // create a label to the right of the checkbox with explanatory text
-            label.innerHTML = types[i];
-            label.setAttribute('for', types[i]);
-            // Whenever a person clicks on this checkbox, call the update().
-            checkbox.addEventListener('change', update);
-            checkboxes.push(checkbox);
-          }
-
-          // This function is called whenever someone clicks on a checkbox and changes
-          // the selection of markers to be displayed.
-          function update() {
-            var enabled = {};
-            // Run through each checkbox and record whether it is checked. If it is,
-            // add it to the object of types to display, otherwise do not.
-            for (var i = 0; i < checkboxes.length; i++) {
-              if (checkboxes[i].checked) enabled[checkboxes[i].id] = true;
-            }
-            map.featureLayer.setFilter(function(feature) {
-              // If this symbol is in the list, return true. if not, return false.
-              // The 'in' operator in javascript does exactly that: given a string
-              // or number, it says if that is in a object.
-              // 2 in { 2: true } // true
-              // 2 in { } // false
-              return (feature.properties['marker-symbol'] in enabled);
-            });
-          }
-        });
-
-      }
+     
       
 
     
