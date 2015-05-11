@@ -92,8 +92,10 @@
 
       var addMarkers = function(results){
         var markers = map.featureLayer.getGeoJSON();
+        var diagnosisColors = {"Malaria": '#fa0', "Tuberculosis": "#8DD2D7", "Dengue": "#CF4E4E", "Ebola": "#53CF4E"};
         for (var i=0; i<results.length; i++){
           var res = results[i];
+          var diagnosis = res.diagnosis;
           var geojson = {
                  type: "Feature",
                  geometry: {
@@ -101,11 +103,11 @@
                   coordinates: [res.lat, res.lng]
                  },
                  properties: {
-                   title: res.diagnosis,
+                   title: diagnosis,
 
                   'marker-size': 'large',
                   'marker-symbol': 'bus',
-                  'marker-color': '#fa0'
+                  'marker-color': diagnosisColors.diagnosis
                 }
           };
           markers.push(geojson);
