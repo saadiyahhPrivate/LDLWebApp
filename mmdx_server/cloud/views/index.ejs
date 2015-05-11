@@ -4,38 +4,22 @@
 
     <title>MMDx: File to test functions rapidly</title>
 
-    <style>
-      #map2 {
-        min-width:900px;
-        max-width: 1050px;
-        min-height: 580px;
-        width:auto;
-        height:auto;
-      }
-
-      #contollerBar{
-        float:left; 
-        min-width:300px; 
-        height:580px; 
-        padding-right:20px;
-        padding-left:20px;
-        background-color: #dcdcdc;
-
-      }
-
-        .filter-ui {
-          background:#fff;
-          position:absolute;
-          top:10px;
-          right:10px;
-          z-index:100;
-          padding:10px;
-          border-radius:3px;
-          }
-    </style>
 
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+    <script src="javascripts/jQDateRangeSlider-min.js"></script>
+    <link rel="stylesheet" href="stylesheets/iThing-min.css">
+
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script type ="text/javascript" src="javascripts/index.js"></script>
+
+
+    
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -56,161 +40,55 @@
 
 
   <body>
+    <div class="page-header">
+      <h1> Results of MMDx <small>in progress</small></h1>
+    </div>
 
-    <!-- MapBox Approach -->
-    <h1> Mapbox approach: In progress 2</h1>
-    
-    <div id="Map components">
-      <div id="contollerBar">
-        <!-- Put controls here -->
-        <p> Tweak things here to display</p>
-        <form id="filters">
-          <div class="checkbox">
-            <label>
-              <input id = "dengueRadio" type="checkbox" value="Dengue">
-              Dengue 
-            </label>
-          </div>
+    <div class="container-fluid">
+      <div id="Map components" class="row">
+        <div id='map' class="col-md-9"></div>
+        <div id="contollerBar" class="col-md-3">
+          <div class="panel panel-default">
+           <div class="panel-heading">
+              <h4>Filter parameters</h4>
+           </div>
+           <div class="panel-body">
+              <form id="filters">
+              <h5>Disease type: </h5>
+              <div class="checkbox">
+                <label>
+                  <input id = "dengueRadio" type="checkbox" value="Dengue">
+                  Dengue
+                </label>
+              </div>
 
-          <div class="checkbox">
-            <label>
-              <input id = "ebolaRadio" type="checkbox" value="Ebola">  
-              Ebola    
-            </label>
+              <div class="checkbox">
+                <label>
+                  <input id = "ebolaRadio" type="checkbox" value="Ebola">  
+                  Ebola    
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input id = "malariaRadio" type="checkbox" value="Malaria">
+                  Malaria      
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input id = "tuberculosisRadio" type="checkbox" value="Tuberculosis">
+                  Tuberculosis     
+                </label>
+              </div>
+              <hr>
+              <h5>Date: </h5>
+              <div id="slider"></div>
+              <button type="submit" class="btn btn-primary">Filter</button>
+              </form>
+           </div>
           </div>
-          <div class="checkbox">
-            <label>
-              <input id = "malariaRadio" type="checkbox" value="Malaria">
-              Malaria      
-            </label>
-          </div>
-          <div class="checkbox">
-            <label>
-              <input id = "tuberculosisRadio" type="checkbox" value="Tuberculosis">
-              Tuberculosis     
-            </label>
-          </div>
-          <button type="submit" class="btn btn-primary">Filter</button>
-        </form>
-
+        </div>
       </div>
-      <nav id='filters' class='filter-ui'></nav>
-      <div id='map2'></div>
-      <script>
-        L.mapbox.accessToken = 'pk.eyJ1IjoibW1keGFwcCIsImEiOiJwY0Q4MHZ3In0.pM9yzFoRKpkXcm8T8rh1QQ';
-        var map = L.mapbox.map('map2', 'mmdxapp.58a3a46d', {
-          // These options apply to the tile layer in the map.
-          tileLayer: {
-          // This map option disables world wrapping. by default, it is false.
-            continuousWorld: false,
-          // This option disables loading tiles outside of the world bounds.
-            noWrap: true
-          }
-        }).setView([11.109315, 22.000575], 2);
-
-
-        map.featureLayer.setGeoJSON([]);
-
-        $.ajax({
-
-              url: "/map",
-              method: "GET",
-              success: function(data) {
-                  if (data.statusCode == 200) {
-                    addMarkers(data.results);
-
-                  } else {
-                      errorRedirect(data.message);
-                  }
-              }   
-          });
-
-      
-
-      var addMarkers = function(results){
-
-        var markers = [];
-        var diagnosisColors = {'Malaria': '#fa0', 'Tuberculosis': "#8DD2D7", 'Dengue': "#CF4E4E", 'Ebola': "#53CF4E"};
-        var symbol = {'Malaria': 'm', 'Tuberculosis': "t", 'Dengue': "d", 'Ebola': "e"};
-        //var diagnosisColors = {'Malaria': '#fa0', 'Tuberculosis': "#fa0", 'Dengue': "#fa0", 'Ebola': "#fa0"};
-        for (var i=0; i<results.length; i++){
-          var res = results[i];
-          var diagnosis = res.diagnosis;
-          var myColor = diagnosisColors[diagnosis];
-          var mySymbol = symbol[diagnosis];
-          //console.log(myColor);
-          var description = "latitude: "+ res.lat + ", longitude: "+ res.lng;
-          var geojson = {
-                 type: "Feature",
-                 geometry: {
-                  type: "Point",
-                  coordinates: [res.lng, res.lat]
-                 },
-                 properties: {
-                   title: diagnosis,
-                   description: description,
-                  'marker-size': 'small',
-                  'marker-symbol': mySymbol,
-                  'marker-color': myColor
-                }
-          };
-          markers.push(geojson);
-
-        }
-        map.featureLayer.setGeoJSON(markers);
-      }
-
-
-      $("#filters").submit(function(){
-        event.preventDefault();
-        var ebolaChecked = $("#ebolaRadio").is(":checked");
-        var dengueChecked = $("#dengueRadio").is(":checked");
-        var tuberculosisChecked = $("#tuberculosisRadio").is(":checked");
-        var malariaChecked = $("#malariaRadio").is(":checked");
-        var disList = [];
-        if(ebolaChecked){
-          disList.push("Ebola");
-        }
-
-        if(dengueChecked){
-          disList.push("Dengue");
-        }
-
-        if(malariaChecked){
-          disList.push("Malaria");
-        }
-
-        if(tuberculosisChecked){
-          disList.push("Tuberculosis");
-        }
-
-        var query = {'diseases':disList};
-
-
-        $.ajax({
-              url: "/map_filtered",
-              method: "POST",
-              data:JSON.stringify(query),
-              processData: false,
-              contentType: 'application/json',
-              success: function(data) {
-                  if (data.statusCode == 200) {
-                    addMarkers(data.results);
-
-                  } else {
-                      console.log("ERROR");
-                  }
-              }   
-          });
-
-
-      });
-      
-     
-      
-
-    
-      </script>
     </div>
 
     <!-- Printout of query results -->

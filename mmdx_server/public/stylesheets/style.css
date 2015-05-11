@@ -1,0 +1,11 @@
+.container-fluid{
+      margin-left: 20px!important;
+}
+
+#map{
+      min-width:900px;
+      max-width: 1050px;
+      min-height: 580px;
+      width:auto;
+      height:auto;
+}
