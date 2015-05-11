@@ -49,3 +49,16 @@ exports.showAll = function(req, res) {
     res.send(500, 'Failed loading results');
   });
 };
+
+exports.giveFiltered = function(req, res) {
+  var filterParams = req.body;
+  var list = filterParams.diseases;
+  var query = new Parse.Query(Result);
+  query.descending('createdAt');
+  query.containedIn("diagnosis", list)
+  query.find({
+    success: function(results) {
+      res.json({statusCode: 200, results:results});;
+    }
+  });
+};

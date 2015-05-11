@@ -22,6 +22,7 @@ app.get('/hello', function(req, res) {
 app.post('/send_data', resultsController.receiveData);
 app.get('/all', resultsController.showAll);
 app.get('/map', resultsController.giveAll);
+app.post('/map_filtered', resultsController.giveFiltered);
 
 //adding stuff for d3.js
 // require.config({

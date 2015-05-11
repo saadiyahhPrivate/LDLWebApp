@@ -35,8 +35,18 @@
     </style>
 
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    
     <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.7.0/mapbox-gl.js'></script>
@@ -54,6 +64,35 @@
       <div id="contollerBar">
         <!-- Put controls here -->
         <p> Tweak things here to display</p>
+        <form id="filters">
+          <div class="checkbox">
+            <label>
+              <input id = "dengueRadio" type="checkbox" value="Dengue">
+              Dengue 
+            </label>
+          </div>
+
+          <div class="checkbox">
+            <label>
+              <input id = "ebolaRadio" type="checkbox" value="Ebola">  
+              Ebola    
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input id = "malariaRadio" type="checkbox" value="Malaria">
+              Malaria      
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input id = "tuberculosisRadio" type="checkbox" value="Tuberculosis">
+              Tuberculosis     
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
       </div>
       <nav id='filters' class='filter-ui'></nav>
       <div id='map2'></div>
@@ -69,9 +108,8 @@
           }
         }).setView([11.109315, 22.000575], 2);
 
-        L.mapbox.featureLayer().setGeoJSON([]);
 
-        //map.featureLayer.setGeoJSON([]);
+        map.featureLayer.setGeoJSON([]);
 
         $.ajax({
 
@@ -90,7 +128,8 @@
       
 
       var addMarkers = function(results){
-        var markers = map.featureLayer.getGeoJSON();
+
+        var markers = [];
         var diagnosisColors = {'Malaria': '#fa0', 'Tuberculosis': "#8DD2D7", 'Dengue': "#CF4E4E", 'Ebola': "#53CF4E"};
         var symbol = {'Malaria': 'm', 'Tuberculosis': "t", 'Dengue': "d", 'Ebola': "e"};
         //var diagnosisColors = {'Malaria': '#fa0', 'Tuberculosis': "#fa0", 'Dengue': "#fa0", 'Ebola': "#fa0"};
@@ -120,6 +159,52 @@
         }
         map.featureLayer.setGeoJSON(markers);
       }
+
+
+      $("#filters").submit(function(){
+        event.preventDefault();
+        var ebolaChecked = $("#ebolaRadio").is(":checked");
+        var dengueChecked = $("#dengueRadio").is(":checked");
+        var tuberculosisChecked = $("#tuberculosisRadio").is(":checked");
+        var malariaChecked = $("#malariaRadio").is(":checked");
+        var disList = [];
+        if(ebolaChecked){
+          disList.push("Ebola");
+        }
+
+        if(dengueChecked){
+          disList.push("Dengue");
+        }
+
+        if(malariaChecked){
+          disList.push("Malaria");
+        }
+
+        if(tuberculosisChecked){
+          disList.push("Tuberculosis");
+        }
+
+        var query = {'diseases':disList};
+
+
+        $.ajax({
+              url: "/map_filtered",
+              method: "POST",
+              data:JSON.stringify(query),
+              processData: false,
+              contentType: 'application/json',
+              success: function(data) {
+                  if (data.statusCode == 200) {
+                    addMarkers(data.results);
+
+                  } else {
+                      console.log("ERROR");
+                  }
+              }   
+          });
+
+
+      });
       
      
       
