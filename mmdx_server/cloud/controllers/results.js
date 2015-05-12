@@ -10,6 +10,7 @@ exports.receiveData = function(req, res) {
     new_result.set("lat", results.lat.toString());
     new_result.set("lng", results.lng.toString());
     new_result.set("diagnosis", results.diagnosis);
+    new_result.set("laneData", results.laneData.toString());
 
     new_result.save(null, {
       success: function(new_result) {
