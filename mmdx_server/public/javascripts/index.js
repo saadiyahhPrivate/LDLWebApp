@@ -57,8 +57,8 @@ $(document).ready(function(){
   }
   var addMarkers = function(results){
     var markers = [];
-    var diagnosisColors = {'Malaria': '#fa0', 'Tuberculosis': "#8DD2D7", 'Dengue': "#CF4E4E", 'Ebola': "#53CF4E"};
-    var symbol = {'Malaria': 'm', 'Tuberculosis': "t", 'Dengue': "d", 'Ebola': "e"};
+    var diagnosisColors = {'Dengue I': '#fa0', 'Dengue II': "#8DD2D7", 'Dengue III': "#CF4E4E", 'Dengue IV': "#53CF4E"};
+    var symbol = {'Dengue I': 'd', 'Dengue II': "d", 'Dengue III': "d", 'Dengue IV': "d"};
     //var diagnosisColors = {'Malaria': '#fa0', 'Tuberculosis': "#fa0", 'Dengue': "#fa0", 'Ebola': "#fa0"};
     for (var i=0; i<results.length; i++){
       var res = results[i];
@@ -90,25 +90,25 @@ $(document).ready(function(){
 
   $("#filters").submit(function(){
     event.preventDefault();
-    var ebolaChecked = $("#ebolaRadio").is(":checked");
-    var dengueChecked = $("#dengueRadio").is(":checked");
-    var tuberculosisChecked = $("#tuberculosisRadio").is(":checked");
-    var malariaChecked = $("#malariaRadio").is(":checked");
+    var dengueIChecked = $("#dengueIRadio").is(":checked");
+    var dengueIIChecked = $("#dengueIIRadio").is(":checked");
+    var dengueIIIChecked = $("#dengueIIIRadio").is(":checked");
+    var dengueIVChecked = $("#dengueIVRadio").is(":checked");
     var disList = [];
-    if(ebolaChecked){
-      disList.push("Ebola");
+    if(dengueIChecked){
+      disList.push("Dengue I");
     }
 
-    if(dengueChecked){
-      disList.push("Dengue");
+    if(dengueIIChecked){
+      disList.push("Dengue II");
     }
 
-    if(malariaChecked){
-      disList.push("Malaria");
+    if(dengueIIIChecked){
+      disList.push("Dengue III");
     }
 
-    if(tuberculosisChecked){
-      disList.push("Tuberculosis");
+    if(dengueIVChecked){
+      disList.push("Dengue IV");
     }
 
     var query = {'diseases':disList};

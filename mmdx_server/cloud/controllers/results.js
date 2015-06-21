@@ -10,7 +10,6 @@ exports.receiveData = function(req, res) {
     new_result.set("lat", results.lat.toString());
     new_result.set("lng", results.lng.toString());
     new_result.set("diagnosis", results.diagnosis);
-    new_result.set("laneData", results.laneData.toString());
 
     new_result.save(null, {
       success: function(new_result) {
@@ -56,12 +55,12 @@ exports.giveFiltered = function(req, res) {
   var list = filterParams.diseases;
   var minDate = new Date(filterParams.minDate);
   var maxDate = new Date(filterParams.maxDate);
-
+  console.log(list);
   var query = new Parse.Query(Result);
   query.descending('createdAt');
   query.containedIn("diagnosis", list)
-  query.greaterThanOrEqualTo( "createdAt", minDate);
-  query.lessThanOrEqualTo( "createdAt", maxDate);
+  //query.greaterThanOrEqualTo( "createdAt", minDate);
+  //query.lessThanOrEqualTo( "createdAt", maxDate);
   query.find({
     success: function(results) {
       res.json({statusCode: 200, results:results});;
